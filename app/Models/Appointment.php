@@ -11,8 +11,9 @@ class Appointment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'doctor_id', 'patient_name', 'patient_phone',
-        'patient_email', 'appointment_date', 'status', 'symptoms'
+        'doctor_id', 'patient_id',
+        'patient_name', 'patient_phone', 'patient_email',
+        'appointment_date', 'status', 'symptoms'
     ];
 
     protected $casts = [
@@ -22,5 +23,10 @@ class Appointment extends Model
     public function doctor(): BelongsTo
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    public function patient(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class);
     }
 }

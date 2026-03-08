@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Slot;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Http;
 
 class AppointmentService
 {
+    protected string $base_uri;
+
+    public function __construct()
+    {
+        $this->base_uri = Config::get('api.base_uri');
+    }
+
     /**
      * Поиск доступных врачей по специализации
      */
@@ -24,7 +32,8 @@ class AppointmentService
             // добавляем задержку для демонстрации
             usleep(rand(100000, 300000)); // 100-300ms
 
-            $query = Doctor::where('specialization', $specialization);
+            $query = Doctor::query()
+            ->where('specialization', 'LIKE','%'.$specialization.'%');
 
             if ($experienceYears) {
                 $query->where('experience_years', '>=', $experienceYears);
@@ -40,7 +49,7 @@ class AppointmentService
     public function getAvailableSlots(int $doctorId, string $date)
     {
         // Имитация запроса к "внешнему API расписания"
-        $response = Http::timeout(2)->get('http://localhost:8077/api/internal/slots', [
+        $response = Http::timeout(2)->get($this->base_uri . '/api/internal/slots', [
             'doctor_id' => $doctorId,
             'date' => $date
         ]);
@@ -83,13 +92,13 @@ class AppointmentService
     protected function sendNotifications(Appointment $appointment)
     {
         // Имитация отправки SMS
-        $smsResponse = Http::post('http://localhost:8077/api/internal/sms', [
+        $smsResponse = Http::post($this->base_uri . '/api/internal/sms', [
             'phone' => $appointment->patient_phone,
             'message' => "Запись к врачу {$appointment->doctor->name} на {$appointment->appointment_date}"
         ]);
 
         // Имитация отправки Email
-        $emailResponse = Http::post('http://localhost:8077/api/internal/email', [
+        $emailResponse = Http::post($this->base_uri . '/api/internal/email', [
             'email' => $appointment->patient_email,
             'subject' => 'Подтверждение записи',
             'body' => "Вы записаны к врачу..."
