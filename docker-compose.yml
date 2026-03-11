@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  app:  # 👈 Должен быть отступ в 2 пробела от services
+  app:
     build:
       context: .
       dockerfile: Dockerfile
@@ -105,5 +103,5 @@ services:
       - dev
 
 networks:
-  clinic-network:  # 👈 Здесь тоже нужен отступ
+  clinic-network:
     driver: bridge
