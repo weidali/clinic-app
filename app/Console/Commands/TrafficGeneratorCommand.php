@@ -117,7 +117,7 @@ class TrafficGeneratorCommand extends Command
 
             // 3. Создание записи
             if (!empty($slots)) {
-                $this->createAppointment($doctor, $slots[0], $date);
+                $this->createAppointment($doctor, $slots[0], $date, $baseUri);
             }
 
             $span->setAttribute('scenario.steps_completed', 3);
@@ -299,7 +299,8 @@ class TrafficGeneratorCommand extends Command
                         $this->createAppointment(
                             $slot->doctor,
                             ['start_time' => $slot->start_time],
-                            $slot->start_time->format('Y-m-d')
+                            $slot->start_time->format('Y-m-d'),
+                            $baseUri
                         );
                     }
                     break;
