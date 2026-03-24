@@ -29,13 +29,14 @@ class GenerateTraffic extends Command
     {
         $count = $this->argument('count');
         $baseUri = Config::get('api.base_uri');
+        $zipkinUI = Config::get('opentelemetry.traces.exporter.ui');
 
         $this->info('Запуск генерации тестового трафика для Zipkin');
         $this->line('----------------------------------------');
-        $this->info('📊 Zipkin UI: http://localhost:9411');
+        $this->info('📊 Zipkin UI: '.$zipkinUI);
         $this->newLine();
 
-        $bar = $this->output->createProgressBar($count);
+        $bar = $this->output->createProgressBar((int)$count);
         $bar->setFormat("%current%/%max% [%bar%] %percent:3s%%\n %message%");
         $bar->setMessage('Подготовка...');
         $bar->start();
@@ -233,6 +234,27 @@ class GenerateTraffic extends Command
             $scope->detach();
             $span->end();
         }
+    }
+
+    private function safeCount($value): int
+    {
+        if (is_array($value)) {
+            return count($value);
+        }
+
+        if ($value instanceof \Countable) {
+            return count($value);
+        }
+
+        if (is_null($value)) {
+            return 0;
+        }
+
+        if (is_object($value)) {
+            return count(get_object_vars($value));
+        }
+
+        return 0;
     }
 
     protected function errorScenario($baseUri)

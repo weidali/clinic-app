@@ -17,6 +17,7 @@ return [
         'exporter' => [
             'type' => 'zipkin',
             'endpoint' => env('OTEL_EXPORTER_ENDPOINT', 'http://localhost:9411/api/v2/spans'),
+            'ui' => env('OTEL_EXPORTER_UI', 'http://localhost:9411'),
         ],
     ],
 ];

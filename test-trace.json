@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1234567890123456",
+    "traceId": "12345678901234567890123456789012",
+    "name": "test-endpoint",
+    "timestamp": $(($(date +%s) * 1000000)),
+    "duration": 10000,
+    "localEndpoint": {
+      "serviceName": "test-service"
+    }
+  }
+]

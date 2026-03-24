@@ -49,6 +49,11 @@ class OpenTelemetryProvider extends ServiceProvider
             $spanProcessor,
             $sampler
         );
+        \Log::info('OpenTelemetry: создание трассировщика', [
+            'enabled' => Config::get('opentelemetry.enabled'),
+            'endpoint' => Config::get('opentelemetry.traces.exporter.endpoint'),
+            'service' => Config::get('opentelemetry.service.name')
+        ]);
 
         return $tracerProvider->getTracer(
             Config::get('opentelemetry.service.name', 'clinic-app')

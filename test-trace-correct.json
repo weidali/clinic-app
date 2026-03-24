@@ -1,0 +1,17 @@
+[
+  {
+    "id": "4e2a1e0b9f5c6d8a",
+    "traceId": "4e2a1e0b9f5c6d8a7f3c2b1a9d8e7f6c",
+    "name": "test-endpoint",
+    "timestamp": 1700000000000000,
+    "duration": 10000,
+    "localEndpoint": {
+      "serviceName": "test-service",
+      "ipv4": "127.0.0.1"
+    },
+    "tags": {
+      "http.method": "GET",
+      "http.status_code": "200"
+    }
+  }
+]
